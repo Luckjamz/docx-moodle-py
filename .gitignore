@@ -3,3 +3,6 @@ final_text_with_answers.txt
 processed_text.txt
 *.docx
 *.doc
+/build
+/dist
+*.spec

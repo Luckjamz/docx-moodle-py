@@ -33,18 +33,24 @@ def extract_and_group_questions(file_path):
     for group in grouped_text_blocks:
         lines_with_answers.append(group)
         # Find matches for answer choices in <span> tags within the group
-        span_pattern = re.compile(r'([A-Z]\))\s*<span.*?>.*?<\/span>')
-        span_matches = span_pattern.findall(group)
+        answer_pattern = re.compile(r'([A-Z]\))\s*<(span|u|i|b).*?>.*?<\/(span|u|i|b)>')
+        answer_matches = answer_pattern.findall(group)
+
+        # # Iterate through matches and add the prefix "ANSWER: "
+        # for i, answer_option in enumerate(span_matches):
+        #     formatted_answer = f"ANSWER: {answer_option}"
+        #     lines_with_answers.append(formatted_answer)
 
         # Iterate through matches and add the prefix "ANSWER: "
-        for i, answer_option in enumerate(span_matches):
-            formatted_answer = f"ANSWER: {answer_option}"
+        for answer_match in answer_matches:
+            answer_option = answer_match[0]
+            formatted_answer = f"ANSWER:{answer_option}"
             lines_with_answers.append(formatted_answer)
 
     
 
-     # Remove <span> tags
-    lines_with_answers = [re.sub(r'<span.*?>|<\/span>', '', line) for line in lines_with_answers]
+     # Remove <span>, <u>, <i>, or <b> tags
+    lines_with_answers = [re.sub(r'<(span|u|i|b).*?>|<\/(span|u|i|b)>', '', line) for line in lines_with_answers]
     # Remove HTML tags and style attributes from the lines with answers
     lines_with_answers = [re.sub(r'<.*?>', '', line) for line in lines_with_answers]
     lines_with_answers = [re.sub(r'style=".*?"', '', line) for line in lines_with_answers]
@@ -63,6 +69,11 @@ def group_text_by_numbers(text):
     numbers_pattern = re.compile(r'(\d+\))')
     numbers_matches = numbers_pattern.findall(text)
 
+    #Check if the qustion paragraph is a lisl number
+    if not numbers_matches:
+        print("No numbers found in the text. Cannot group.")
+        return []
+
     # Initialize a list to store grouped text
     grouped_text = []
 
@@ -79,7 +90,7 @@ def group_text_by_numbers(text):
     return grouped_text
 
 # Provide the path to the Word file
-word_file_path = "plik_2.docx"
+word_file_path = "plik_1.docx"
 
 # Call the extraction, grouping, and processing function
 extract_and_group_questions(word_file_path)
