@@ -1,3 +1,4 @@
+import os
 from docx2python import docx2python
 import re
 
@@ -57,12 +58,23 @@ def extract_and_group_questions(file_path):
     # Remove ---images tag
     lines_with_answers = [re.sub(r'-.*','', line ) for line in lines_with_answers]
     
+    if os.path.exists("processed_text.txt"):
+        os.remove("processed_text.txt")
+
+    # Construct the final output file name with a number
+    final_output_file_name = f"final_text_with_answers.txt"
+     # Check if the file already exists
+    if os.path.exists(final_output_file_name):
+        # Ask for confirmation to overwrite
+        user_input = input(f"The file {final_output_file_name} already exists. Overwrite? (Y/N): ").lower()
+        if user_input != 'y':
+            print("Operation aborted.")
+            return
 
     # Save the final text to a file
-    final_output_file_path = "final_text_with_answers.txt"
-    with open(final_output_file_path, "w", encoding="utf-8") as final_output_file:
+    with open(final_output_file_name, "w", encoding="utf-8") as final_output_file:
         final_output_file.write('\n'.join(lines_with_answers))
-        print('\n'.join(lines_with_answers))
+        print(f"File saved as {final_output_file_name}")
 
 def group_text_by_numbers(text):
     # Find numbers like '1)', '2)', etc.
@@ -71,7 +83,7 @@ def group_text_by_numbers(text):
 
     #Check if the qustion paragraph is a lisl number
     if not numbers_matches:
-        print("No numbers found in the text. Cannot group.")
+        print("No numbered questions found in the text. Cannot group.")
         return []
 
     # Initialize a list to store grouped text

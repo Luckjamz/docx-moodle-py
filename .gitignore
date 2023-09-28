@@ -1,6 +1,6 @@
 #Step of the process
 final_text_with_answers.txt
-processed_text.txt
+*.txt
 *.docx
 *.doc
 /build
