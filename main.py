@@ -55,21 +55,17 @@ def extract_and_group_questions(file_path, output_number=1):
 
     # Group text by numbers
     grouped_text_blocks = group_text_by_numbers(processed_contents)
-    # print(grouped_text_blocks)
+
     # Initialize a list to store lines with "ANSWER" prefixes
     lines_with_answers = []
 
     # Iterate through groups and add "ANSWER" prefixes
     for group in grouped_text_blocks:
         lines_with_answers.append(group)
+
         # Find matches for answer choices in <span> tags within the group
         answer_pattern = re.compile(r'([A-Z]\))\s*<(span|u|i|b).*?>.*?<\/(span|u|i|b)>')
         answer_matches = answer_pattern.findall(group)
-
-        # # Iterate through matches and add the prefix "ANSWER: "
-        # for i, answer_option in enumerate(span_matches):
-        #     formatted_answer = f"ANSWER: {answer_option}"
-        #     lines_with_answers.append(formatted_answer)
 
         # Iterate through matches and add the prefix "ANSWER: "
         for answer_match in answer_matches:
@@ -77,30 +73,28 @@ def extract_and_group_questions(file_path, output_number=1):
             formatted_answer = f"ANSWER:{answer_option}"
             lines_with_answers.append(formatted_answer)
 
-    
-
-     # Remove <span>, <u>, <i>, or <b> tags
+    # Remove <span>, <u>, <i>, or <b> tags
     lines_with_answers = [re.sub(r'<(span|u|i|b).*?>|<\/(span|u|i|b)>', '', line) for line in lines_with_answers]
+
     # Remove HTML tags and style attributes from the lines with answers
     lines_with_answers = [re.sub(r'<.*?>', '', line) for line in lines_with_answers]
     lines_with_answers = [re.sub(r'style=".*?"', '', line) for line in lines_with_answers]
+
     # Remove ---images tag
     lines_with_answers = [re.sub(r'-.*','', line ) for line in lines_with_answers]
-    
+
+
+    #Delete helper
     if os.path.exists("processed_text.txt"):
         os.remove("processed_text.txt")
 
     # Construct the final output file name with a number
     final_output_file_name = f"final_text_{output_number}.txt"
 
-     # Check if the file already exists
+    # Check if the file already exists
     if os.path.exists(final_output_file_name):
-        # # Ask for confirmation to overwrite
-        # user_input = input(f"The file {final_output_file_name} already exists. Overwrite? (Y/N): ").lower()
-        # if user_input != 'y':
-        #     messagebox.showwarning("Warning", "Operation aborted.")
-        #     return
-        # Ask the user if they want to overwrite the file
+        
+        # Ask for confirmation to overwrite
         user_response = messagebox.askyesno("File Exists", f"{final_output_file_name} already exists. Do you want to overwrite it?")
         if not user_response:
             messagebox.showinfo("Info", "No changes made.")
