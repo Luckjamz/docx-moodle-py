@@ -32,7 +32,8 @@ python main.py
 
 3. Wybierz plik Word, który chcesz skonwertować.
 4. Program przetworzy plik i utworzy plik tekstowy w formacie Aiken.
-5. Sprawdź wynikowy plik `final_text.txt` dla pytań i odpowiedzi w formacie Aiken.
+5. Opcjonalnie można podać suffix kolejnej wersii generowanego pliku `final_text.txt`, domyślnie jest to wartość: `1` (`final_text_1`) 
+6. Sprawdź wynikowy plik `final_text.txt` dla pytań i odpowiedzi w formacie Aiken.
 
 ## Uwagi
 
