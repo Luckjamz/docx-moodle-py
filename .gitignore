@@ -6,3 +6,4 @@ final_text_with_answers.txt
 /build
 /dist
 *.spec
+.venv
